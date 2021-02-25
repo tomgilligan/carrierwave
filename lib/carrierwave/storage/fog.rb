@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require "cgi"
+
 module CarrierWave
   module Storage
 
@@ -336,9 +338,8 @@ module CarrierWave
         # [NilClass] no file name available
         #
         def filename(options = {})
-          if file_url = url(options)
-            URI.decode(file_url).gsub(/.*\/(.*?$)/, '\1').split('?').first
-          end
+          return unless file_url = url(options)
+          CGI.unescape(file_url.split('?').first).gsub(/.*\/(.*?$)/, '\1')
         end
 
       private
